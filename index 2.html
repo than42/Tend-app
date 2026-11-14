@@ -1,0 +1,146 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Tend"><meta name="theme-color" content="#FBF6EF"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-180.png"><link rel="manifest" href="manifest.webmanifest"><title>Tend</title>
+<style>
+:root{--bg:#fbf6ef;--cd:#fffdf9;--tx:#3d3128;--mu:#7d6b5c;--ac:#f2b88a;--at:#a4531c;--on:#4a2c14;--ln:#eadfd2;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+
+
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.4 -apple-system,system-ui,"Segoe UI",sans-serif;padding-bottom:84px}
+.wrap{max-width:560px;margin:0 auto;padding:16px}h1{font-size:24px;margin:6px 0}
+.card{background:var(--cd);border:1px solid var(--ln);border-radius:14px;padding:12px 14px;margin:8px 0}.today{border-color:var(--ac);box-shadow:0 0 0 2px var(--ac)}
+.row{display:flex;align-items:center;gap:10px}.sp{flex:1}.mu{color:var(--mu);font-size:14px}ul{margin:6px 0 0;padding-left:20px}
+button{font:inherit;border:1px solid var(--ac);border-radius:10px;padding:10px 14px;background:var(--ac);color:var(--on)}
+button.g{background:transparent;color:var(--at);border-color:var(--ln)}
+input,select{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--ln);border-radius:8px;padding:8px}input{width:70px}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--cd);border-top:1px solid var(--ln);padding-bottom:env(safe-area-inset-bottom,0px);z-index:4}
+nav button{flex:1;background:none;border:0;color:var(--mu);border-radius:0;padding:14px 0 12px}nav button.on{color:var(--at);font-weight:600}
+.ov{position:fixed;inset:0;background:var(--bg);overflow:auto;padding-top:env(safe-area-inset-top,0px);padding-bottom:40px;z-index:5}
+</style></head><body><div id="app"></div><script>
+const D=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],$=s=>document.querySelector(s);
+const E={squat:["Box or goblet squat",3,"8–10 reps","3 sec down, parallel or just above. Knees track over toes.",2],
+press:["Dumbbell shoulder press",3,"8–10 reps","Neutral grip if you feel pinching.",1],
+pullap:["Band pull-apart",3,"15 reps","Squeeze the shoulder blades together.",1],
+row:["Bent-over row",3,"10 reps","Pull to the lower ribs, not the chest.",1],
+bridge:["Glute bridge",3,"10–12 reps","Add weight, then go single-leg.",2],
+walk:["Band walk",2,"10 steps each way","Band above the knees, small quarter-squat steps, pelvis level.",2],
+calf:["Calf raise",3,"12–15 reps","Slow lowering. Single-leg when easy.",3],
+legr:["Leg raise",3,"10 reps","Swap for dead bug if the front of the hip pinches.",3],
+splank:["Side plank",2,"20–30 sec each side","Sore hip side first. Bend the knees at first.",1],
+curl:["Dumbbell curl",2,"12 reps","",3],tri:["Tricep extension",2,"12 reps","",3],
+rdl:["Romanian or trap bar deadlift",3,"6–8 reps","3 sec lowering. Bar to mid-shin or just below the knee.",1],
+pushup:["Push-up",3,"8–12 reps","Hands on a bench if form breaks down.",2],
+facep:["Band face pull",3,"12–15 reps","Pull toward the face, elbows high.",2],
+swing:["Kettlebell swing",3,"10 reps","Add once the hip has been calm ~2 weeks. Until then, a 3rd set of RDLs.",3],
+lat:["Dumbbell lateral raise",2,"12 reps","Light, stop at shoulder height.",3],
+sit:["Sit-up",2,"10 reps","",3],crunch:["Crunch",2,"10 reps","",3],bike:["Bicycle crunch",2,"20 reps","",3],
+abd:["Isometric wall abduction",3,"30 sec","Press the outside of the knee or foot into a wall, 3/10 effort or less. Sore side.",1],
+bridgeb:["Banded glute bridge",1,"12 reps","",2],
+hipf:["Half-kneeling hip flexor stretch",1,"30 sec each side","Tuck the pelvis under, shift gently forward.",3],
+er:["Band external rotation",2,"12 reps each side","Elbow tucked at your side. Weaker side first.",2],
+pec:["Doorway pec stretch",1,"30 sec each side","",3],dkc:["Double knee-to-chest",1,"30 sec","Knees about hip-width apart.",3],
+yr:["Band Y-raise",2,"10 reps","Thumbs up, ribs down, lead with the lower traps. Progress to prone Y raises (face down, no band) when it feels easy.",3],
+scap:["Scap push-up (push-up plus)",2,"10 reps","Arms straight at the top of a push-up: push the floor away so the shoulder blades spread. Knees down or hands on a bench if needed. Slow.",3],
+wsl:["Wall slides",1,"10 reps","Forearms on the wall, slide up and slightly back. Blade flat on the ribs, no shrugging.",3],
+wball:["Wall ball figure-8",2,"8–10 loops each way","Small ball between hand and wall, light pressure, elbow at or below shoulder height. Slow figure-8s, torso still. Blade flat on the ribs, no shrugging or winging. Affected side first.",3],
+tsr:["Open-book rotation",1,"8 reps each side","On your side, knees bent and stacked. Rotate the top arm open and let your eyes follow the hand. Move through the upper back, not the lower back.",3],
+punch:["Serratus punch",2,"10 reps","On your back with a light dumbbell or band (or standing with a band): punch up and reach the shoulder blade forward without shrugging. Slow.",3],
+lunge:["Reverse lunge",3,"8 reps each side","Step back, torso upright, front knee over toes, pelvis level.",3],
+splitsq:["Split squat",3,"8 reps each side","Short stance, pelvis level. Single-leg work loads the hip tendon more, so add it once two-leg squats feel easy.",3],
+stepdn:["Step-down",3,"8–10 reps each side","From a low step, pelvis level, knee over toes.",3],
+sldl:["Single-leg Romanian deadlift",3,"8 reps each side","Bodyweight first. Keep the hips square.",3],
+sbridge:["Single-leg glute bridge",3,"10 reps each side","Keep the pelvis level.",3],
+deadbug:["Dead bug",3,"8 reps each side","Lower back stays flat. A good swap for leg raises.",3]};
+const S={A:{n:"Strength: Squat",sub:"Squat day · ~45 min",m:45,b:[["squat"],["press","pullap"],["row","bridge"],["walk","calf"],["legr","splank"],["curl","tri"]],note:"Warm-up (3 min): band pull-apart ×15, glute bridge ×10, bodyweight squat ×10. Pairs are supersets: alternate between the two."},
+B:{n:"Strength: Hinge",sub:"Hinge day · ~45 min",m:45,b:[["rdl"],["pushup","facep"],["swing","calf"],["row","tri"],["lat","curl"],["sit","crunch","bike"]],note:"Warm-up (3 min): band pull-apart ×15, glute bridge ×10, bodyweight hinge ×10. Pairs are supersets; the last block is a circuit."},
+M1:{n:"Maintenance 1",sub:"Hips + scapular control · ~9 min",m:8,b:[["abd"],["bridgeb"],["hipf"],["wball"],["pullap:2"],["tsr"],["pec"]],note:"Affected shoulder first, then match its reps on the other side. Slow reps: feel the blade move against the ribs, no shrugging."},
+M2:{n:"Maintenance 2",sub:"Hips + scapular control · ~9 min",m:8,b:[["splank"],["walk:1"],["dkc"],["er"],["yr"],["scap"],["punch"],["wsl"]],note:"Keep everything mild. Affected shoulder first. Slow reps, blade flat on the ribs."},
+C:{n:"Combined strength",sub:"Both strength days in one",note:"One main lower lift (RDL), one push, one pull, hip isometric and side plank, plus shoulder band work. Curls, triceps, swings, calves and core are dropped; sets trim to 2 if time is short."},
+R:{n:"Run",sub:"Easy flat run · ~45 min",m:45,note:"Check the hip that evening and next morning. Above ~3/10, or not settled in 24 h, means cut next week’s run. Groin or front-of-hip pain, pain when hopping or walking, or night pain: stop and get it assessed.",run:[
+["Warm-up (8 min)",["Brisk walk, 3 min, building pace","Isometric wall abduction, 2 × 30 sec, sore side, 3/10 effort or less","Glute bridge ×10","Band walk, 1 × 10 steps each way, light band","Leg swings front to back ×10 each leg, holding a wall (never across the body)","Calf raise ×10","First 3–5 min of the run slower than your easy pace"]],
+["The run",["Flat, easy, conversational pace. No hills, cambered roads or tight turns for now.","About 20–30 min, or roughly 50–70% of your usual distance. If walking and stairs aren’t fully settled, use 2 min run / 1 min walk.","Cadence about 5% higher than usual: short, quick steps.","Add no more than ~10% per week. Pain ceiling 3/10; above that, walk."]],
+["Cool-down (8 min)",["Walk 3–5 min until breathing is normal","Calf stretch at a wall, 30 sec each leg (straight knee, then bent knee)","Half-kneeling hip flexor stretch, 30 sec each side","Double knee-to-chest, 30 sec","Hamstring stretch on your back, leg pointing straight up, 30 sec each side","Skip figure-4, pigeon and ITB stretches for now"]]]},
+RD:{n:"Ride",sub:"Easy low-impact ride · ~45 min",m:45,note:"Check the hip that evening and next morning. Above ~3/10, or not settled in 24 h, means cut back next time. Groin or front-of-hip pain, or night pain: stop and get it assessed.",run:[["Warm-up (5 min)",["Easy spin, 5 min, light gear and smooth cadence","Glute bridge ×10 before you start","Isometric wall abduction, 2 × 30 sec, sore side, 3/10 effort or less"]],["The ride",["Easy to moderate, conversational effort","About 30–60 min, flat or gently rolling","Saddle height: a slight bend in the knee at the bottom of the stroke. Too high makes the hips rock and loads the outer hip.","Keep the pelvis still and stay seated on steep climbs for now","Pain ceiling 3/10 at the hip; ease off if it climbs above that"]],["Cool-down (5 min)",["Easy spin, 5 min, until breathing settles","Half-kneeling hip flexor stretch, 30 sec each side","Calf stretch at a wall, 30 sec each leg","Double knee-to-chest, 30 sec","Skip figure-4, pigeon and ITB stretches for now"]]]}};
+let st,off=0,view=null,tab="week",dlg=null;
+const DF=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+const init=()=>{st=st||{};st.weeks=st.weeks||{};st.logs=st.logs||{};st.last=st.last||{};st.tpl=st.tpl||{};st.cust=st.cust||{};st.cx=st.cx||{}};
+try{st=JSON.parse(localStorage.getItem("wk1"))}catch(e){}init();Object.assign(E,st.cust);
+const save=()=>{try{localStorage.setItem("wk1",JSON.stringify(st))}catch(e){}};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const mon=o=>{const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-(d.getDay()+6)%7+o*7);return d};
+const key=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const fm=d=>d.toLocaleDateString("en-AU",{day:"numeric",month:"short"});
+const wk=()=>key(mon(off)),dd=i=>{const d=mon(off);d.setDate(d.getDate()+i);return d},ti=(new Date().getDay()+6)%7;
+const W=k=>{let w=st.weeks[k];if(!w)w=st.weeks[k]=[[],[],[],[],[],[],[]];else if(w.plan)w=st.weeks[k]=w.plan;w.forEach(ss=>ss.forEach(x=>{if(!x.id)x.id=k+"|"+x.s}));return w};
+const nm=x=>x.s==="X"?esc(x.n):S[x.s].n+(x.s==="C"?" · "+x.m+" min":"");
+const cur=()=>W(view.w)[view.day][view.j],run=x=>S[x.s]&&S[x.s].run,tg=id=>+(E[id][2].match(/\d+/)||[0])[0];
+const last=s=>{let b=null;for(const w in st.weeks)W(w).forEach((ss,i)=>ss.forEach(x=>{if(x.s===s&&x.d){const d=new Date(w+"T12:00");d.setDate(d.getDate()+i);if(!b||d>b)b=d}}));return b?"last "+fm(b):""};
+function build(m){const p=["rdl","press","pullap","row","abd","splank","bridge","walk","er"].map(i=>[i,E[i][1]]),t=()=>3+p.reduce((a,x)=>a+x[1]*1.5,0),by=(a,b)=>E[b[0]][4]-E[a[0]][4];
+while(t()>m){const c=[...p].reverse().filter(x=>x[1]>2).sort(by)[0];if(c){c[1]=2;continue}const d=[...p].reverse().sort(by)[0];if(!d||E[d[0]][4]<2)break;p.splice(p.indexOf(d),1)}return p}
+const blocks=x=>x.s==="C"?build(x.m).map(p=>[p]):(x.s==="X"?x.b:st.cx[x.s]||S[x.s].b).map(b=>b.map(t=>{const[i,n]=t.split(":");return[i,+n||E[i][1]]}));
+const stat=x=>{const L=st.logs[x.id]||{};let p=0,d=0;blocks(x).flat().forEach(([id,n])=>{const w=n*tg(id);p+=w;if(L[id]===true)d+=w});return{p,d}};
+const badge=x=>{if(!x.d)return"○";if(run(x)){const a=((st.logs[x.id]||{}).run||[])[0]||[];return"✓"+(a[0]?" "+esc(a[0])+" min":"")+(a[1]?" · "+esc(a[1])+" km":"")}return"✓"+(x.p!=null?" "+x.p+"%":"")};
+const opts=()=>Object.keys(E).filter(i=>!st.cust[i]).sort((a,b)=>E[a][0].localeCompare(E[b][0])).map(i=>`<option value="${i}">${esc(E[i][0])}</option>`).join("")+`<option value="+">Custom exercise…</option>`;
+const cust=()=>{const n=(prompt("Exercise name")||"").trim();if(!n)return null;const r=(prompt("Sets × reps, e.g. 3 × 10")||"").trim(),m=r.match(/^(\d+)\s*[x×]\s*(.+)$/i),id="u"+Date.now();st.cust[id]=E[id]=[n,m?+m[1]:3,m?m[2]:(r||"10 reps"),"",3];return id};
+const ask=(t,f,ok)=>{dlg={t,f,ok}};
+const pick=(t,cb)=>{const v=t.value;if(!v)return;if(v!=="+")return cb(v);ask("Custom exercise",[["Exercise name"],["Sets × reps, e.g. 3 × 10"]],([n,r])=>{n=n.trim();if(!n)return;r=r.trim();const m=r.match(/^(\d+)\s*[x×]\s*(.+)$/i),id="u"+Date.now();st.cust[id]=E[id]=[n,m?+m[1]:3,m?m[2]:(r||"10 reps"),"",3];cb(id)})};
+const tpl=x=>{if(st.tpl[x.n])st.tpl[x.n]=JSON.parse(JSON.stringify(x.b))};
+const cb=s=>(st.cx[s]||S[s].b).map(b=>b.slice()),sv=(s,b)=>{st.cx[s]=b;save()};
+const lab=n=>n>1?`<div class="mu" style="margin-top:12px">${["","","Superset · alternate","Circuit"][n]}</div>`:"";
+const inp=(k,id,n,i,f,ph,v)=>`<input inputmode="decimal" data-k="${esc(k)}" data-e="${id}" data-sets="${n}" data-n="${i}" data-f="${f}" placeholder="${esc(ph)}" value="${esc(v)}">`;
+function ex(id,n,L,z){const e=E[id],o=L[id]===true;
+return`<div class="card row"><div class="sp"><b>${esc(e[0])}</b><div>${n} × ${esc(e[2])}</div>${e[3]?`<div class="mu">${esc(e[3])}</div>`:""}${z||""}</div><button class="${o?"":"g"}" data-a="tk" data-e="${id}">${o?"✓ Done":"Done"}</button></div>`}
+function sess(){const x=cur(),k=x.id,L=st.logs[k]||{},s=S[x.s]||{sub:"Custom workout",note:"Add exercises at the bottom, then tick each one off."},l=x.s==="X"?"":last(x.s);
+let h=`<div class="ov"><div class="wrap"><div class="row"><button class="g" data-a="close">‹ Week</button><span class="sp"></span>${x.d?`<button class="g" data-a="unf">Mark not done</button>`:""}</div><h1>${nm(x)}</h1><div class="mu">${s.sub}${l?" · "+l:""}</div><div class="card mu">${s.note}</div>`;
+if(run(x)){s.run.forEach(z=>h+=`<div class="card"><b>${z[0]}</b><ul>${z[1].map(i=>`<li>${i}</li>`).join("")}</ul></div>`);
+const a=(L.run||[])[0]||["",""];
+h+=`<div class="card"><b>Log run (optional)</b><div class="row" style="margin-top:8px">${inp(k,"run",1,0,0,"min",a[0])}<span>min</span>${inp(k,"run",1,0,1,"km",a[1])}<span>km</span></div></div>`}
+else{h+=`<button class="g" data-a="all" style="width:100%">Tick all</button>`;
+blocks(x).forEach((b,bi)=>{h+=lab(b.length);b.forEach(([id,n])=>h+=ex(id,n,L,x.s==="X"?`<button class="g" data-a="rmx" data-b="${bi}" style="margin-top:6px">Remove</button>`:""))});
+if(x.s==="X")h+=`<div class="card"><select data-a="addx" style="width:100%"><option value="">+ Add exercise</option>${opts()}</select></div><button class="g" data-a="svt" style="width:100%;margin-top:8px">${st.tpl[x.n]?"Remove from + Add list":"Save to + Add list"}</button>`}
+return h+`<button data-a="fin" style="width:100%;margin-top:12px">${x.d?"Save changes":"Finish workout"}</button></div></div>`}
+function defv(){const s=view.def;
+let h=`<div class="ov"><div class="wrap"><div class="row"><button class="g" data-a="close">‹ Back</button><span class="sp"></span>${st.cx[s]?`<button class="g" data-a="rst">Reset to default</button>`:""}</div><h1>${S[s].n}</h1><div class="mu">Changes apply to this workout everywhere.</div>`;
+blocks({s}).forEach((b,bi)=>{h+=lab(b.length);b.forEach(([id,n],j)=>h+=`<div class="card"><b>${esc(E[id][0])}</b><div>${n} × ${esc(E[id][2])}</div><div class="row" style="margin-top:8px"><select class="sp" data-a="swap" data-b="${bi}" data-j="${j}"><option value="">Swap for…</option>${opts()}</select><button class="g" data-a="rmd" data-b="${bi}" data-j="${j}">Remove</button></div></div>`)});
+return h+`<div class="card"><select data-a="addd" style="width:100%"><option value="">+ Add exercise</option>${opts()}</select></div></div></div>`}
+const def=()=>`<h1>Edit defaults</h1><div class="mu">Change the exercises inside the standard workouts. Run, Ride and Combined can’t be edited.</div>`+["A","B","M1","M2"].map(s=>`<div class="card row" data-a="odef" data-s="${s}"><div class="sp"><b>${S[s].n}</b><div class="mu">${S[s].sub}${st.cx[s]?" · edited":""}</div></div><span class="mu">›</span></div>`).join("")+(Object.keys(st.tpl).length?`<h1 style="font-size:18px;margin-top:20px">Saved custom workouts</h1><div class="mu">These appear in every day’s + Add list.</div>`+Object.keys(st.tpl).map((n,i)=>`<div class="card row"><span class="sp">${esc(n)}</span><button class="g" data-a="dtp" data-i="${i}">Delete</button></div>`).join(""):"");
+function week(){const w=W(wk()),all=w.flat(),dn=all.filter(x=>x.d).length;
+let h=`<div class="row"><button class="g" data-a="off" data-d="-1">‹</button><h1 class="sp" style="text-align:center">${off==0?"This week":off==1?"Next week":off==-1?"Last week":"Week of "+fm(mon(off))}</h1><button class="g" data-a="off" data-d="1">›</button></div><div class="mu" style="text-align:center">${fm(mon(off))} – ${fm(dd(6))}${all.length?" · "+dn+" of "+all.length+" done":""}</div>`;
+if(!all.length&&W(key(mon(off-1))).flat().length)h+=`<button class="g" data-a="cp" style="width:100%;margin-top:8px">Copy last week</button>`;
+const pk=`<option value="">+ Add</option>`+[["A"],["B"],["M1"],["M2"],["R"],["RD"],["C30","Combined · 30 min"],["C45","Combined · 45 min"]].map(([v,n])=>{const l=last(v[0]==="C"?"C":v);return`<option value="${v}">${n||S[v].n}${l?" · "+l:""}</option>`}).join("")+Object.keys(st.tpl).map((n,i)=>`<option value="t:${i}">${esc(n)} (custom)</option>`).join("")+`<option value="h">Copy a past custom workout…</option><option value="+">New custom workout…</option>`;
+w.forEach((ss,i)=>{h+=`<div class="card${off==0&&i==ti?" today":""}" style="padding:8px 12px;margin:6px 0"><div class="row"><b class="sp">${DF[i]} <span class="mu" style="font-weight:400">${fm(dd(i))}</span></b><select data-a="add" data-d="${i}" style="width:80px;padding:4px 8px;font-size:14px;color:var(--at)">${pk}</select></div>`;
+ss.forEach((x,j)=>h+=`<div class="row" style="margin-top:2px"><div class="sp" data-a="open" data-d="${i}" data-x="${j}" style="padding:6px 0">${nm(x)} <span class="mu">›</span></div><span class="${x.d?"":"mu"}">${badge(x)}</span><span class="mu" data-a="del" data-d="${i}" data-x="${j}" style="padding:6px 2px 6px 8px">×</span></div>`);
+h+="</div>"});
+return h+`<div class="row" style="margin:16px 0"><button class="g sp" data-a="bk">Copy backup</button><button class="g sp" data-a="rs">Restore</button></div>`}
+const TA="width:100%;margin-top:8px;box-sizing:border-box;font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--ln);border-radius:8px;padding:8px";
+const dv=()=>{const d=dlg;return`<div style="position:fixed;inset:0;background:rgba(40,25,10,.4);z-index:9;padding:calc(env(safe-area-inset-top,0px) + 70px) 16px 0;box-sizing:border-box"><div class="card" style="max-width:420px;margin:0 auto;max-height:70vh;overflow:auto"><b>${esc(d.t)}</b>${d.f.map((f,i)=>f[2]?`<textarea id="dg${i}" rows="6" placeholder="${esc(f[0])}" style="${TA}"${d.ok?"":" readonly"}>${esc(f[1]||"")}</textarea>`:`<input id="dg${i}" placeholder="${esc(f[0])}" value="${esc(f[1]||"")}" style="${TA}">`).join("")}${(d.l||[]).map((l,i)=>`<div class="row" data-a="dpk" data-i="${i}" style="padding:10px 0;border-top:1px solid var(--ln)"><span class="sp">${esc(l)}</span><span class="mu">+ Add</span></div>`).join("")}<div class="row" style="margin-top:12px"><span class="sp"></span><button class="g" data-a="dcx">${d.ok?"Cancel":"Close"}</button>${d.ok?`<button data-a="dok">OK</button>`:""}</div></div></div>`};
+function render(){const o=$(".ov"),os=o?o.scrollTop:0,y=scrollY;
+$("#app").innerHTML=`<div class="wrap">${tab=="week"?week():def()}</div>${view?(view.def?defv():sess()):""}${dlg?dv():""}<nav>${[["week","Week"],["def","Edit defaults"]].map(t=>`<button class="${tab==t[0]?"on":""}" data-a="tab" data-t="${t[0]}">${t[1]}</button>`).join("")}</nav>`;
+const n=$(".ov");if(n)n.scrollTop=os;scrollTo(0,y)}
+const K={dok:()=>{const d=dlg,v=d.f.map((f,i)=>document.getElementById("dg"+i).value);dlg=null;d.ok(v)},dcx:()=>{dlg=null},dpk:d=>{const f=dlg.pk;dlg=null;f(+d.i)},svt:()=>{const x=cur();if(st.tpl[x.n])delete st.tpl[x.n];else st.tpl[x.n]=JSON.parse(JSON.stringify(x.b));save()},dtp:d=>{delete st.tpl[Object.keys(st.tpl)[+d.i]];save()},tab:d=>{tab=d.t},off:d=>{off+=+d.d},open:d=>{view={w:wk(),day:+d.d,j:+d.x}},odef:d=>{view={def:d.s}},close:()=>{view=null},
+del:d=>{const w=W(wk()),x=w[d.d][d.x],go=()=>{w[+d.d].splice(+d.x,1);save()};if(x.d)ask("Remove this completed workout?",[],go);else go()},
+cp:()=>{const n=W(wk());W(key(mon(off-1))).forEach((ss,i)=>ss.forEach(x=>n[i].push({...x,id:uid(),d:false,p:null})));save()},
+tk:d=>{const x=cur(),L=st.logs[x.id]=st.logs[x.id]||{};L[d.e]=L[d.e]===true?false:true;save()},
+all:()=>{const x=cur(),L=st.logs[x.id]=st.logs[x.id]||{};blocks(x).flat().forEach(([id])=>{L[id]=true});save()},
+fin:()=>{const x=cur();x.d=true;if(!run(x)){const t=stat(x);x.p=t.d?Math.round(t.d/t.p*100):null}save();view=null},
+unf:()=>{const x=cur();x.d=false;x.p=null;save()},
+rmx:d=>{const x=cur();x.b.splice(+d.b,1);tpl(x);save()},
+rmd:d=>{const s=view.def,b=cb(s);b[+d.b].splice(+d.j,1);if(!b[+d.b].length)b.splice(+d.b,1);sv(s,b)},
+rst:()=>{delete st.cx[view.def];save()},
+bk:()=>{const j=JSON.stringify(st);try{navigator.clipboard.writeText(j).catch(()=>{})}catch(e){}ask("Backup (copy this text)",[["",j,1]],null)},
+rs:()=>ask("Paste backup",[["Paste backup text here","",1]],([j])=>{try{st=JSON.parse(j);init();Object.assign(E,st.cust);save()}catch(e){ask("That didn’t look like a backup",[],null)}})};
+const C={add:t=>{const v=t.value;if(!v)return;const i=+t.dataset.d,w=W(wk());let x;
+if(v==="+"){ask("New custom workout",[["Workout name"]],([n])=>{n=n.trim();if(!n)return;const y={s:"X",n,b:[],id:uid()};w[i].push(y);save();view={w:wk(),day:i,j:w[i].length-1}});return}
+else if(v==="h"){const hs=[],sn={};Object.keys(st.weeks).sort().reverse().forEach(k=>{const wd=W(k);for(let d=6;d>=0;d--)wd[d].forEach(y=>{if(y.s==="X"&&!sn[y.n]){sn[y.n]=1;const dt=new Date(k+"T12:00");dt.setDate(dt.getDate()+d);hs.push({n:y.n,b:y.b,dt})}})});ask(hs.length?"Copy a past custom workout":"No past custom workouts yet",[],null);dlg.l=hs.map(h=>h.n+" · "+h.b.length+" exercises · "+fm(h.dt));dlg.pk=n=>{const h=hs[n];w[i].push({s:"X",n:h.n,b:JSON.parse(JSON.stringify(h.b)),id:uid()});save()};return}
+else if(v.startsWith("t:")){const n=Object.keys(st.tpl)[+v.slice(2)];x={s:"X",n,b:JSON.parse(JSON.stringify(st.tpl[n]))}}
+else x=v[0]==="C"?{s:"C",m:+v.slice(1)}:{s:v,m:S[v].m||45};
+x.id=uid();w[i].push(x);save();if(v==="+")view={w:wk(),day:i,j:w[i].length-1}},
+addx:t=>pick(t,id=>{const x=cur();x.b.push([id]);tpl(x);save()}),
+swap:t=>{const s=view.def,b=cb(s),i=+t.dataset.b,j=+t.dataset.j;pick(t,id=>{b[i][j]=id;sv(s,b)})},
+addd:t=>{const s=view.def,b=cb(s);pick(t,id=>{b.push([id]);sv(s,b)})}};
+document.addEventListener("click",e=>{const t=e.target.closest("[data-a]");if(!t)return;const f=K[t.dataset.a];if(f){f(t.dataset);render()}});
+document.addEventListener("change",e=>{const t=e.target,f=t.dataset&&C[t.dataset.a];if(f){f(t);render()}});
+document.addEventListener("input",e=>{const t=e.target,d=t.dataset;if(!d.k)return;
+const L=st.logs[d.k]=st.logs[d.k]||{},a=L[d.e]=Array.isArray(L[d.e])?L[d.e]:[["",""]];
+if(!a[+d.n])a[+d.n]=["",""];a[+d.n][+d.f]=t.value;save()});
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+render();
+</script></body></html>
